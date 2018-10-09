@@ -26,7 +26,7 @@
 ########################################################################################
 
 """
-<plugin key="tixi_tuya_smartbulb_plugin" name="Tuya SmartBulb" author="tixi" version="1.0.0" externallink=" https://github.com/tixi/Domoticz-Tuya-SmartBulb-Plugin">
+<plugin key="tixi_tuya_smartbulb_plugin" name="Tuya SmartBulb" author="tixi" version="1.0.1" externallink=" https://github.com/tixi/Domoticz-Tuya-SmartBulb-Plugin">
 	<params>
 		<param field="Address" label="IP address" width="200px" required="true"/>
 		<param field="Mode1" label="DevID" width="200px" required="true"/>
@@ -107,6 +107,9 @@ class BasePlugin:
 				if(self.__last_payload != None):
 					self.__payload_to_execute(self.__last_payload)
 			else:
+				Domoticz.Debug("OnConnect Error Status: " + str(Status))
+				if(Status==113):#no route to host error (skip to avoid intempestive connect call)
+					return
 				if(self.__connection.Connected()):
 					self.__connection.Disconnect()
 				if(not self.__connection.Connecting()):
